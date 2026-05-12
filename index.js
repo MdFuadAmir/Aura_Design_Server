@@ -1,12 +1,11 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+dotenv.config();
 import { MongoClient, ServerApiVersion } from "mongodb";
 import admin from "firebase-admin";
-import fs from "fs";
-const serviceAccount = JSON.parse(
-  fs.readFileSync("./firebase-config.json", "utf-8"),
-);
+
+const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
@@ -23,7 +22,6 @@ import Pricing from "./src/Routes/Pricing.js";
 import Contact from "./src/Routes/Contact.js";
 import Stats from "./src/Routes/Stats.js";
 // ===================== middleware ==================== //
-dotenv.config();
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -66,16 +64,14 @@ async function run() {
     Subscriber(app, subscriberCollection, verifyToken);
     Testmonials(app, testmonialCollection, verifyToken);
     Blogs(app, blogsCollection, verifyToken);
-    Projects(app, projectsCollection,verifyToken);
-    Pricing(app, prigingCollection,verifyToken);
-    Contact(app, contactCollection,verifyToken);
-    Stats(app, collections,verifyToken);
+    Projects(app, projectsCollection, verifyToken);
+    Pricing(app, prigingCollection, verifyToken);
+    Contact(app, contactCollection, verifyToken);
+    Stats(app, collections, verifyToken);
     // ===================== MongoDB connection test ================= //
     // await client.connect();
-    await client.db("admin").command({ ping: 1 });
-    console.log("✅ Pinged your deployment. Connected to MongoDB!");
   } catch (error) {
-    console.error("❌ MongoDB Connection Error:", error);
+    // console.error("❌ MongoDB Connection Error:", error);
   }
 }
 run().catch(console.dir);
@@ -89,7 +85,4 @@ app.use((req, res) => {
   res.status(404).send({ message: "Route not found" });
 });
 
-// ================= Start server ================= //
-app.listen(port, () => {
-  console.log(`Aura Design Server is running on port ${port}`);
-});
+export default app;

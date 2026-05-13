@@ -23,7 +23,7 @@ import Contact from "./src/Routes/Contact.js";
 import Stats from "./src/Routes/Stats.js";
 // ===================== middleware ==================== //
 const app = express();
-const port = process.env.PORT || 3000;
+// const port = process.env.PORT || 3000;
 
 app.use(
   cors({
@@ -71,7 +71,6 @@ async function run() {
     // ===================== MongoDB connection test ================= //
     // await client.connect();
   } catch (error) {
-    // console.error("❌ MongoDB Connection Error:", error);
   }
 }
 run().catch(console.dir);
